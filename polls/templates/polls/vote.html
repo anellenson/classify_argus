@@ -1,0 +1,11 @@
+<h1>Classify this image </h1>
+<img src = {{ image }}>
+<ul>
+  <form action="{% url 'polls:vote' image.id %}" method="post">
+{% csrf_token %}
+{% for state in state.objects.all %}
+    <input type="radio" name="state" id="state{{ forloop.counter }}" value="{{ state.name }}">
+    <label for="state{{ forloop.counter }}">{{ state.name }}</label><br>
+{% endfor %}
+<input type="submit" value="Vote">
+</form>
