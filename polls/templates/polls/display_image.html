@@ -1,0 +1,15 @@
+{% load static %}
+
+<h1>Classify this image </h1>
+
+<img src = {% static image.filename %}>
+
+<ul>
+  <form action="{% url 'polls:vote' %}" method="post">{% csrf_token %}
+  <input type="hidden" name="image_pk" value="{{ image.pk }}">
+{% for state in states %}
+    <input type="checkbox" name="state" id="state{{ forloop.counter }}" value="{{ state.pk }}">
+    <label for="state{{ forloop.counter }}">{{ state.name }}</label><br>
+{% endfor %}
+<input type="submit" value="Vote">
+</form>
