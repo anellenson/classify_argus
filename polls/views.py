@@ -3,20 +3,38 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Image, State, User_states_image
 from django.views import generic
 from django.urls  import reverse
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 
-# Create your views here.
-# Classify "image"
-# Classify "vote"
-# Back action
-# Vote action
 
+#To do :
+# Create a view where the user can choose to register, or to login as a returning user.
+
+def login_request(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request=request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}")
+                return HttpResponseRedirect(reverse('polls:display_image'))
+            else:
+                messages.error(request, "Invalid username or password.")
+        else:
+            messages.error(request, "Invalid username or password.")
+    form = AuthenticationForm()
+
+    return render(request = request,
+                    template_name = "polls/login.html",
+                    context={"form":form})
 
 def register(request):
 
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = AuthenticationForm(request.POST)
 
         if form.is_valid():
             form.save()
@@ -32,13 +50,12 @@ def register(request):
 def display_image(request):
     user = request.user
 
-    user_objects = [uu for uu in User_states_image.objects.all() if uu == user] #retrieve all user objects
-    user_imgs = [uu.image for uu in user_objects]
+    user_imgs = [uu.image for uu in User_states_image.objects.all() if uu.user == user] #retrieve all images the user has labelled
     not_categorized = [im for im in Image.objects.all() if im not in user_imgs] #which ones are not in the list
-    image = get_object_or_404(Image, pk = not_categorized[0].pk) #can choose to randomie or not
+
+    image = get_object_or_404(Image, pk = not_categorized[0].pk) #can choose to randomize or not, for not take each one
 
     return render(request, 'polls/display_image.html', {'image': image, 'states':State.objects.all()})
-
 
 
 def vote(request):
