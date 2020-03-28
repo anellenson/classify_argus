@@ -1,0 +1,14 @@
+{% extends "polls/header.html" %}
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <script>M.toast({html: "{{message}}", classes: 'blue rounded', displayLength:5000})</script>
+        {% endfor %}
+    {% endif %}
+    <h3> Select a site which you wish to classify: </h3>
+    <form action="{% url 'polls:select_site' %}" method="post">
+        {% csrf_token %}
+        <button class="waves-effect waves-light btn-large" type="submit" name="site" id='nbn' value="nbn">Narrabeen</button>
+        <button class="waves-effect waves-light btn-large" type="submit" name="site" id='duck' value="duck">Duck</button>
+    </form>
+{% endblock %}

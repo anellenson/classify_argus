@@ -1,11 +1,17 @@
+{% extends "polls/header.html" %}
 {% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <script>M.toast({html: "{{message}}", classes: 'blue rounded', displayLength:5000})</script>
+        {% endfor %}
+    {% endif %}
+    <h2> Thanks for being willing to classify a few images! </h2>
 
-    <div class="container">
+
         <form method="POST">
         {% csrf_token %}
         {{form.as_p}}
             <button style="background-color:#F4EB16; color:blue" class="btn btn-outline-info" type="submit">Login</button>
         </form>
-        Don't have an account? <a href={% url 'polls:register' %}><strong>register here</strong></a>!
-    </div>
+        Don't have an account? <a href={% url 'polls:register' %}><strong>Register here</strong></a>!
 {% endblock %}

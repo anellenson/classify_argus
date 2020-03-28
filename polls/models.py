@@ -7,6 +7,10 @@ from django.contrib.auth.models import User
 class Image(models.Model): #Just the actual image
     filename = models.CharField(max_length = 1000)
 
+    def __str__(self):
+        return self.filename
+
+
 
 class State(models.Model):
     name = models.CharField(max_length = 50)
@@ -18,6 +22,8 @@ class User_states_image(models.Model): #Users will be creating/updating this mod
     image = models.ForeignKey(Image, on_delete = models.CASCADE)
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     state = models.ForeignKey(State, on_delete = models.CASCADE)
+
+
 
 
 # Create your models here.

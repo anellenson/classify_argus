@@ -1,3 +1,4 @@
+{% extends "polls/header.html" %}
 {% block content %}
     <div class="content-section">
         <form method="POST">
@@ -6,8 +7,8 @@
                 {{ form.as_p }}
             </fieldset>
             <div class="form-group">
-                <button type="submit" class="btn btn-success">Register</button>
+                <button type="submit" class="btn">Register</button>
             </div>
         </form>
-    </div>
+
 {% endblock content %}

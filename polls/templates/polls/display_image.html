@@ -1,15 +1,39 @@
+{% extends "polls/header.html" %}
+{% block content %}
 {% load static %}
+<body>
+<nav>
+    <div class="nav-wrapper">
+        <ul class="left hide-on-med-and-down">
+            <li> Logged in as {{ user.username }}</li>
+        </ul>
+        <ul class="right hide-on-med-and-down">
+            <li> <a href={% url 'polls:site_selection' %}>Select Site</a></li>
+            <li> <a href={% url 'polls:logout' %}>Logout</a></li>
+        </ul>
+    </div>
+</nav>
 
-<h1>Classify this image </h1>
+<h3>Classify this image for {{ site }} </h3>
 
 <img src = {% static image.filename %}>
 
 <ul>
-  <form action="{% url 'polls:vote' %}" method="post">{% csrf_token %}
-  <input type="hidden" name="image_pk" value="{{ image.pk }}">
-{% for state in states %}
-    <input type="checkbox" name="state" id="state{{ forloop.counter }}" value="{{ state.pk }}">
-    <label for="state{{ forloop.counter }}">{{ state.name }}</label><br>
-{% endfor %}
-<input type="submit" value="Vote">
-</form>
+  <form action="{% url 'polls:vote' %}" method="post"> {% csrf_token %}
+    <input type="hidden" name="image_pk" value="{{ image.pk }}">
+        {% for state in states %}
+            <p>
+            <label>
+            <input type="radio" name="state" id="state{{ forloop.counter }}" value="{{ state.pk }}" />
+                <span style="color:black"> {{ state.name }} </span>
+            </label>
+{#    <input type="checkbox" name="state" id="state{{ forloop.counter }}" value="{{ state.pk }}"> is site{{ forloop }} access the site object within the for loop? #}
+{#    <label for="state{{ forloop.counter }}">{{ state.name }}</label><br>#}
+        {% endfor %}
+    <p>
+    <input type="submit" value="Vote">
+  </form>
+    <input type=button value="Previous Page" onClick="javascript:history.go(-1);">
+
+
+{% endblock %}
